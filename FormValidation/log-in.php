@@ -1,43 +1,45 @@
 <?php
 session_start();
 
-// Initialize an empty array to hold errors
 $errors = [];
 
-// Check if the form has been submitted
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    // Simulated user data from session (replace this with actual data from your database)
-    if (isset($_SESSION['registered_user'])) {
-        $userData = $_SESSION['registered_user']; // Get stored user data from sign-up
-    } else {
-        $userData = []; // No registered users
-    }
-
-    // Get the email and password inputs
     $email = filter_var(trim($_POST['email']), FILTER_SANITIZE_EMAIL);
     $password = trim($_POST['password']);
 
-    // Validate email
-    if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-        $errors[] = "Invalid email format.";
-    } elseif (!isset($userData['email']) || $email !== $userData['email']) {
-        $errors[] = "No user found with this email.";
-    } else {
-        // Verify password
-        if (password_verify($password, $userData['password'])) {
-            // Set session variables for the logged-in user
+
+    if (isset($_SESSION['super_admin']) && $email === $_SESSION['super_admin']['email']) {
+        if (password_verify($password, $_SESSION['super_admin']['password'])) {
+            
             $_SESSION['user'] = [
-                'email' => $userData['email'],
+                'email' => $_SESSION['super_admin']['email'],
+                'role' => 'admin'
             ];
-            // Redirect to welcome page
             header('Location: welcome.php');
             exit();
         } else {
-            $errors[] = "Incorrect password.";
+            $errors[] = "Incorrect super admin password.";
+        }
+    } else {
+        
+        if (isset($_SESSION['registered_user']) && $email === $_SESSION['registered_user']['email']) {
+            if (password_verify($password, $_SESSION['registered_user']['password'])) {
+                $_SESSION['user'] = [
+                    'email' => $_SESSION['registered_user']['email'],
+                    'role' => 'user'
+                ];
+                header('Location: welcome.php');
+                exit();
+            } else {
+                $errors[] = "Incorrect password.";
+            }
+        } else {
+            $errors[] = "No user found with this email.";
         }
     }
 }
 ?>
+
 
 
 <!DOCTYPE html>
