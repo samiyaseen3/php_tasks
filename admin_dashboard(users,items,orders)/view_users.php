@@ -1,9 +1,9 @@
 <?php
-// view_users.php
 
-include 'db_connect.php'; // Include database connection
 
-// Fetch users that are not marked as deleted
+include 'db_connect.php'; 
+
+
 $query = "SELECT * FROM users WHERE deleted_at IS NULL";
 $result = mysqli_query($conn, $query);
 

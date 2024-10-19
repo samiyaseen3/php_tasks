@@ -1,8 +1,7 @@
 <?php
-// edit_item.php
 
-include 'db_connect.php'; // Include database connection
 
+include 'db_connect.php'; 
 $id = $_GET['id'];
 $query = "SELECT * FROM Item WHERE item_id = $id";
 $result = mysqli_query($conn, $query);

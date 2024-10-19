@@ -1,7 +1,7 @@
 <?php
-// view_items.php
 
-include 'db_connect.php'; // Include database connection
+
+include 'db_connect.php'; 
 
 $query = "SELECT * FROM Item WHERE deleted_at IS NULL";
 $result = mysqli_query($conn, $query);

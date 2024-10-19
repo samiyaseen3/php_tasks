@@ -1,7 +1,7 @@
 <?php
-// view_orders.php
 
-include 'db_connect.php'; // Include database connection
+
+include 'db_connect.php'; 
 
 $query = "SELECT * FROM `Order` WHERE deleted_at IS NULL";
 $result = mysqli_query($conn, $query);

@@ -1,9 +1,9 @@
 <?php
-// create_order.php
 
-include 'db_connect.php'; // Include database connection
 
-// Fetch users and items to populate the dropdowns
+include 'db_connect.php'; 
+
+
 $users_query = "SELECT user_id, user_name FROM users WHERE deleted_at IS NULL";
 $users_result = mysqli_query($conn, $users_query);
 
@@ -14,13 +14,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $user_order_id = $_POST['user_order_id'];
     $user_item_order_id = $_POST['user_item_order_id'];
 
-    // Insert the new order into the database
+  
     $query = "INSERT INTO `Order` (user_order_id, user_item_order_id) VALUES ($user_order_id, $user_item_order_id)";
     
     if (mysqli_query($conn, $query)) {
-        header('Location: view_orders.php'); // Redirect to view orders
+        header('Location: view_orders.php'); 
     } else {
-        echo "Error: " . mysqli_error($conn); // Display error if any
+        echo "Error: " . mysqli_error($conn); 
     }
 }
 ?>

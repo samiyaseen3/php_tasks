@@ -1,30 +1,30 @@
 <?php
-// edit_user.php
 
-include 'db_connect.php'; // Include database connection
 
-// Get user ID from URL
+include 'db_connect.php'; 
+
+/
 $id = $_GET['id'];
 
-// Fetch user data for the specified ID
+
 $query = "SELECT * FROM users WHERE user_id = $id";
 $result = mysqli_query($conn, $query);
 $user = mysqli_fetch_assoc($result);
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    // Retrieve user data from the form
+   
     $name = $_POST['user_name'];
     $mobile = $_POST['user_mobile'];
     $email = $_POST['user_email'];
     $address = $_POST['user_address'];
 
-    // Update user in the database
+ 
     $query = "UPDATE users SET user_name = '$name', user_mobile = '$mobile', user_email = '$email', user_address = '$address' WHERE user_id = $id";
 
     if (mysqli_query($conn, $query)) {
-        header('Location: view_users.php'); // Redirect to users view
+        header('Location: view_users.php'); 
     } else {
-        echo "Error: " . mysqli_error($conn); // Display error if any
+        echo "Error: " . mysqli_error($conn); 
     }
 }
 ?>

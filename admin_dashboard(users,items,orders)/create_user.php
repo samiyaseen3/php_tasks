@@ -1,22 +1,22 @@
 <?php
-// create_user.php
 
-include 'db_connect.php'; // Include database connection
+
+include 'db_connect.php'; 
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    // Retrieve user data from the form
+
     $name = $_POST['user_name'];
     $mobile = $_POST['user_mobile'];
     $email = $_POST['user_email'];
     $address = $_POST['user_address'];
 
-    // Insert new user into the database
+
     $query = "INSERT INTO users (user_name, user_mobile, user_email, user_address) VALUES ('$name', '$mobile', '$email', '$address')";
 
     if (mysqli_query($conn, $query)) {
-        header('Location: view_users.php'); // Redirect to users view
+        header('Location: view_users.php'); 
     } else {
-        echo "Error: " . mysqli_error($conn); // Display error if any
+        echo "Error: " . mysqli_error($conn); 
     }
 }
 ?>

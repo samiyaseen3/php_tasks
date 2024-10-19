@@ -1,71 +1,71 @@
 <?php
-// create_item.php
 
-include 'db_connect.php'; // Include database connection
+
+include 'db_connect.php'; 
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    // Retrieve item data from the form
+
     $description = $_POST['item_description'];
     $total_number = $_POST['item_total_number'];
 
-    // Handle file upload
-    $target_dir = "uploads/"; // Directory where images will be stored
+ 
+    $target_dir = "uploads/"; 
 
-    // Check if the uploads directory exists, if not, create it
+
     if (!is_dir($target_dir)) {
-        mkdir($target_dir, 0755, true); // Creates the directory with permissions
+        mkdir($target_dir, 0755, true); 
     }
 
     $target_file = $target_dir . basename($_FILES["item_image"]["name"]);
     $uploadOk = 1;
     $imageFileType = strtolower(pathinfo($target_file, PATHINFO_EXTENSION));
 
-    // Check if image file is an actual image or fake image
+
     $check = getimagesize($_FILES["item_image"]["tmp_name"]);
     if ($check === false) {
         $uploadOk = 0;
         $error_message = "File is not an image.";
     }
 
-    // Check if file already exists
+
     if (file_exists($target_file)) {
         $uploadOk = 0;
         $error_message = "Sorry, file already exists.";
     }
 
-    // Check file size (limit to 2MB)
+
     if ($_FILES["item_image"]["size"] > 2000000) {
         $uploadOk = 0;
         $error_message = "Sorry, your file is too large.";
     }
 
-    // Allow certain file formats
+
     if (!in_array($imageFileType, ['jpg', 'png', 'jpeg', 'gif'])) {
         $uploadOk = 0;
         $error_message = "Sorry, only JPG, JPEG, PNG & GIF files are allowed.";
     }
 
-    // Check if $uploadOk is set to 0 by an error
+
     if ($uploadOk == 0) {
         echo "<div class='alert alert-danger'>$error_message</div>";
     } else {
-        // Attempt to move the uploaded file to the target directory
+
         if (move_uploaded_file($_FILES["item_image"]["tmp_name"], $target_file)) {
-            // Use prepared statement to insert new item into the database
+
             $stmt = $conn->prepare("INSERT INTO Item (item_description, item_image, item_total_number) VALUES (?, ?, ?)");
             $stmt->bind_param("ssi", $description, $target_file, $total_number);
 
             if ($stmt->execute()) {
-                header('Location: view_items.php'); // Redirect to items view
+                header('Location: view_items.php'); 
                 exit;
             } else {
-                echo "<div class='alert alert-danger'>Error: " . $stmt->error . "</div>"; // Display error if any
+                echo "<div class='alert alert-danger'>Error: " . $stmt->error . "</div>"; 
             }
             $stmt->close();
         } else {
             echo "<div class='alert alert-danger'>Sorry, there was an error uploading your file. ";
-            echo "Target file: " . $target_file; // Displays the target file path
-            echo "Error: " . print_r(error_get_last(), true) . "</div>"; // Displays last error
+            echo "Target file: " . $target_file; 
+            echo "Error: " . print_r(error_get_last(), true) . "</div>"; 
         }
     }
 }
